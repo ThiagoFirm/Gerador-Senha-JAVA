@@ -1,8 +1,12 @@
 import javax.swing.*;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GeradorSenhaGUI extends JFrame{
+	private GeradorSenha geradorSenha;
+	
 	public GeradorSenhaGUI() {
 		
 		// criando o jframe e adicionando titulo
@@ -20,6 +24,9 @@ public class GeradorSenhaGUI extends JFrame{
 		
 		//centralizar o frame na tela
 		setLocationRelativeTo(null);
+		
+		// iniciar o gerador de senha
+		geradorSenha = new GeradorSenha();
 		
 		addGuiComponents();
 		
@@ -97,6 +104,31 @@ public class GeradorSenhaGUI extends JFrame{
 		JButton btnGerar = new JButton ("Gerar");
 		btnGerar.setFont(new Font("Dialog", Font.PLAIN, 32));
 		btnGerar.setBounds(155, 477, 222, 41);
+		btnGerar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed (ActionEvent e) {
+				// validacao: gera a senha apenas quando o length > 0, e um dos botoes de alternar estiverem pressionados 
+				if(senhaTamanhoInputArea.getText().length() <=0) return ; 
+				boolean qualquerToggleSelected = caixabaixaToggle.isSelected() ||
+						caixaaltaToggle.isSelected() ||
+						numerosToggle.isSelected() ||
+						simbolosToggle.isSelected();
+			// gerar senha
+			// converte o texto para um valor 
+			int senhaTamanho = Integer.parseInt(senhaTamanhoInputArea.getText());
+			if(qualquerToggleSelected) {
+				String senhaGerada = geradorSenha.gerarSenha(senhaTamanho,
+						caixaaltaToggle.isSelected(),
+						caixabaixaToggle.isSelected(),
+						numerosToggle.isSelected(),
+						simbolosToggle.isSelected());
+				
+				// mostra senha gerada
+				senhaOutput.setText(senhaGerada);
+			}
+				
+			}
+		});
 		add(btnGerar);
 	}
 }
